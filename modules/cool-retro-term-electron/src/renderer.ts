@@ -65,28 +65,25 @@ class CRTTerminalApp {
 		this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
 		this.camera.position.z = 1;
 
-		// Create the WebGL renderer
+		// Create the WebGL renderer (use window dimensions like web app)
 		this.renderer = new THREE.WebGLRenderer({ antialias: true });
-		this.renderer.setSize(
-			this.container.clientWidth,
-			this.container.clientHeight,
-		);
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.setClearColor(0x000000);
 		this.container.appendChild(this.renderer.domElement);
 
-		// Create the terminal text renderer (uses internal default settings)
+		// Create the terminal text renderer (use window dimensions like web app)
 		this.terminalText = new TerminalText(
-			this.container.clientWidth,
-			this.container.clientHeight,
+			window.innerWidth,
+			window.innerHeight,
 		);
 		this.terminalText.mesh.position.z = 0;
 		this.scene.add(this.terminalText.mesh);
 
-		// Create the terminal frame
+		// Create the terminal frame (use window dimensions like web app)
 		this.terminalFrame = new TerminalFrame(
-			this.container.clientWidth,
-			this.container.clientHeight,
+			window.innerWidth,
+			window.innerHeight,
 		);
 		this.terminalFrame.mesh.position.z = 0.1;
 		this.scene.add(this.terminalFrame.mesh);
@@ -137,15 +134,12 @@ class CRTTerminalApp {
 	}
 
 	/**
-	 * Handle window resize events
+	 * Handle window resize events (use window dimensions like web app)
 	 */
 	private handleResize = (): void => {
-		const width = this.container.clientWidth;
-		const height = this.container.clientHeight;
-
-		this.renderer.setSize(width, height);
-		this.terminalText.updateSize(width, height);
-		this.terminalFrame.updateSize(width, height);
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
+		this.terminalText.updateSize(window.innerWidth, window.innerHeight);
+		this.terminalFrame.updateSize(window.innerWidth, window.innerHeight);
 
 		// Resize XTerm to match the new grid size
 		if (this.connector) {
@@ -158,16 +152,17 @@ class CRTTerminalApp {
 	};
 
 	/**
-	 * Animation loop
+	 * Animation loop (matching web app order exactly)
 	 */
 	private animate = (): void => {
-		this.animationFrameId = requestAnimationFrame(this.animate);
-
 		// Update time for dynamic shader effects
 		this.terminalText.updateTime(performance.now());
 
 		// Render static pass first (to render target)
 		this.terminalText.renderStaticPass(this.renderer);
+
+		// Request next frame
+		this.animationFrameId = requestAnimationFrame(this.animate);
 
 		// Render the main scene
 		this.renderer.render(this.scene, this.camera);
@@ -296,6 +291,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	const app = new CRTTerminalApp(container);
 	await app.init();
+
+	// Force a resize after initialization to ensure correct dimensions
+	// This fixes issues where window.innerWidth/Height aren't accurate on first load in Electron
+	requestAnimationFrame(() => {
+		window.dispatchEvent(new Event("resize"));
+	});
 
 	// Expose app for debugging
 	(window as unknown as { app: CRTTerminalApp }).app = app;

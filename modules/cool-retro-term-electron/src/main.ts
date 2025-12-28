@@ -42,10 +42,8 @@ function createWindow(): void {
 			contextIsolation: true,
 			sandbox: false, // Required for node-pty IPC
 		},
-		// CRT-style window appearance
-		titleBarStyle: "hiddenInset",
-		vibrancy: "under-window",
-		visualEffectState: "active",
+		// Simple window style (matching web app behavior)
+		titleBarStyle: "default",
 	});
 
 	// Load the renderer HTML

@@ -1,20 +1,21 @@
-# cool-retro-term-webgl
+# cool-retro-term-renderer
 
 A WebGL-based CRT terminal renderer for XTerm.js. This library provides authentic retro CRT visual effects for terminal applications, including screen curvature, phosphor glow, scanlines, and more.
 
-[![npm version](https://img.shields.io/npm/v/cool-retro-term-webgl.svg)](https://www.npmjs.com/package/cool-retro-term-webgl)
+[![npm version](https://img.shields.io/npm/v/cool-retro-term-renderer.svg)](https://www.npmjs.com/package/cool-retro-term-renderer)
+
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Preview
 
-![Preview](assets/images/thumbnail.png)
+![Preview](https://remojansen.github.io/assets/images/thumbnail.png)
 
 Live demo available at https://remojansen.github.io/
 
 ## Installation
 
 ```bash
-npm install cool-retro-term-webgl
+npm install cool-retro-term-renderer
 ```
 
 ### Peer Dependencies
@@ -28,7 +29,7 @@ npm install three @xterm/xterm
 ## Quick Start
 
 ```typescript
-import { CRTTerminal } from 'cool-retro-term-webgl';
+import { CRTTerminal } from 'cool-retro-term-renderer';
 import { Terminal } from '@xterm/xterm';
 
 // Create a container element
@@ -58,6 +59,106 @@ crt.attachXTerm(xterm);
 xterm.write('Hello, CRT World!\r\n');
 xterm.write('$ ');
 ```
+
+## Advanced Usage (Low-Level API)
+
+For more control over the rendering pipeline (e.g., custom Three.js scenes, audio integration, or custom terminal adapters), you can use the lower-level components directly:
+
+```typescript
+import * as THREE from 'three';
+import { TerminalFrame, TerminalText } from 'cool-retro-term-renderer';
+import { Terminal } from '@xterm/xterm';
+
+const container = document.getElementById('terminal')!;
+
+// Create your own Three.js scene
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+camera.position.z = 1;
+
+// Create the renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(0x000000);
+container.appendChild(renderer.domElement);
+
+// Create the terminal text renderer (handles character rendering and effects)
+const terminalText = new TerminalText(window.innerWidth, window.innerHeight);
+terminalText.mesh.position.z = 0;
+scene.add(terminalText.mesh);
+
+// Create the terminal frame (CRT bezel/border)
+const terminalFrame = new TerminalFrame(window.innerWidth, window.innerHeight);
+terminalFrame.mesh.position.z = 0.1;
+scene.add(terminalFrame.mesh);
+
+// Create XTerm instance (hidden, used as input handler)
+const xterm = new Terminal({ cols: 80, rows: 24 });
+const hiddenContainer = document.createElement('div');
+hiddenContainer.style.position = 'absolute';
+hiddenContainer.style.left = '-9999px';
+document.body.appendChild(hiddenContainer);
+xterm.open(hiddenContainer);
+
+// Sync XTerm dimensions with the calculated terminal grid size
+const gridSize = terminalText.getGridSize();
+if (gridSize.cols > 0 && gridSize.rows > 0) {
+  xterm.resize(gridSize.cols, gridSize.rows);
+}
+
+// Listen for grid size changes and resize XTerm
+terminalText.onGridSizeChange((cols, rows) => {
+  if (cols > 0 && rows > 0) {
+    xterm.resize(cols, rows);
+  }
+});
+
+// Handle window resize
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  terminalFrame.updateSize(window.innerWidth, window.innerHeight);
+  terminalText.updateSize(window.innerWidth, window.innerHeight);
+});
+
+// Animation loop
+function animate() {
+  terminalText.updateTime(performance.now());
+  terminalText.renderStaticPass(renderer);
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+animate();
+```
+
+### Low-Level Components
+
+| Export | Description |
+|--------|-------------|
+| `TerminalText` | Renders terminal characters with CRT effects (shaders, bloom, etc.) |
+| `TerminalFrame` | Renders the CRT monitor bezel/frame |
+| `XTermConnector` | Syncs an XTerm.js buffer to `TerminalText` (optional helper) |
+
+### TerminalText Methods
+
+| Method | Description |
+|--------|-------------|
+| `getGridSize()` | Get terminal dimensions `{ cols, rows }` |
+| `onGridSizeChange(callback)` | Register callback for grid size changes |
+| `updateSize(width, height)` | Update renderer dimensions |
+| `updateTime(time)` | Update time uniform for animated effects |
+| `renderStaticPass(renderer)` | Render effects that don't change per-frame |
+| `setFontColor(color)` | Set font color (hex string) |
+| `setBackgroundColor(color)` | Set background color (hex string) |
+| `setScreenCurvature(value)` | Set screen curvature (0-1) |
+| `setBloom(value)` | Set bloom intensity (0-1) |
+| `setBrightness(value)` | Set brightness (0-1) |
+| `setFlickering(value)` | Set flickering intensity (0-1) |
+| `setStaticNoise(value)` | Set static noise (0-1) |
+| `setBurnIn(value)` | Set burn-in persistence (0-1) |
+| `setRasterizationMode(mode)` | Set scanline mode (0-3) |
+| `dispose()` | Clean up resources |
 
 ## API Reference
 
