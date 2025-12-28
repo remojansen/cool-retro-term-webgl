@@ -1,0 +1,57 @@
+{
+	"name": "cool-retro-term-renderer",
+	"version": "1.0.0",
+	"description": "A WebGL-based CRT terminal renderer for XTerm.js with authentic retro effects",
+	"type": "module",
+	"main": "dist/index.cjs",
+	"module": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"build": "npm run generate-assets && tsup --minify",
+		"dev": "npm run generate-assets && tsup --watch",
+		"generate-assets": "node scripts/generate-assets.cjs",
+		"lint-and-format": "npx @biomejs/biome check --write --unsafe",
+		"prepublishOnly": "npm run build"
+	},
+	"keywords": [
+		"terminal",
+		"xterm",
+		"xterm.js",
+		"crt",
+		"retro",
+		"webgl",
+		"three.js",
+		"cool-retro-term",
+		"phosphor",
+		"scanlines",
+		"vintage"
+	],
+	"author": "Remo H. Jansen",
+	"license": "GPL-3.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/remojansen/cool-retro-term-webgl"
+	},
+	"bugs": {
+		"url": "https://github.com/remojansen/cool-retro-term-webgl/issues"
+	},
+	"homepage": "https://github.com/remojansen/cool-retro-term-webgl#readme",
+	"peerDependencies": {
+		"@xterm/xterm": "^5.0.0 || ^6.0.0",
+		"three": "^0.150.0 || ^0.160.0 || ^0.170.0 || ^0.180.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/three": "^0.182.0",
+		"tsup": "^8.3.5",
+		"typescript": "^5.7.2"
+	}
+}

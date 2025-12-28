@@ -88,11 +88,24 @@ export class CRTTerminal {
 
 	/**
 	 * Apply the current settings to the terminal renderer
+	 *
+	 * Note: fontColor and backgroundColor are only applied when explicitly
+	 * set by the user (not matching defaults). This preserves TerminalText's
+	 * internally calculated "mixed" background color based on contrast settings,
+	 * which creates the authentic CRT look with subtle color tinting.
 	 */
 	private applySettings(): void {
 		const s = this.settings;
-		this.terminalText.setFontColor(s.fontColor);
-		this.terminalText.setBackgroundColor(s.backgroundColor);
+
+		// Only apply font/background colors if explicitly changed from defaults
+		// This preserves TerminalText's internal mixed color calculation
+		if (s.fontColor !== DEFAULT_SETTINGS.fontColor) {
+			this.terminalText.setFontColor(s.fontColor);
+		}
+		if (s.backgroundColor !== DEFAULT_SETTINGS.backgroundColor) {
+			this.terminalText.setBackgroundColor(s.backgroundColor);
+		}
+
 		this.terminalText.setScreenCurvature(s.screenCurvature);
 		this.terminalText.setRgbShift(s.rgbShift);
 		this.terminalText.setBloom(s.bloom);

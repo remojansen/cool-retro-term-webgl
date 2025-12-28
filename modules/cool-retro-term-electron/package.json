@@ -1,0 +1,50 @@
+{
+	"name": "cool-retro-term-electron",
+	"version": "1.0.0",
+	"description": "Electron-based CRT terminal application using cool-retro-term-renderer",
+	"type": "module",
+	"main": "dist/main.cjs",
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"start": "electron .",
+		"rebuild": "npx @electron/rebuild",
+		"lint-and-format": "npx @biomejs/biome check --write --unsafe"
+	},
+	"keywords": [
+		"terminal",
+		"electron",
+		"xterm",
+		"xterm.js",
+		"crt",
+		"retro",
+		"webgl",
+		"cool-retro-term",
+		"pty",
+		"node-pty"
+	],
+	"author": "Remo H. Jansen",
+	"license": "GPL-3.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/remojansen/cool-retro-term-webgl"
+	},
+	"bugs": {
+		"url": "https://github.com/remojansen/cool-retro-term-webgl/issues"
+	},
+	"homepage": "https://github.com/remojansen/cool-retro-term-webgl#readme",
+	"dependencies": {
+		"@xterm/xterm": "^5.5.0",
+		"cool-retro-term-renderer": "*",
+		"node-pty": "^1.0.0",
+		"three": "^0.170.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@electron/rebuild": "^3.7.1",
+		"@types/node": "^22.10.2",
+		"electron": "^33.2.1",
+		"tsup": "^8.3.5",
+		"typescript": "^5.7.2"
+	}
+}

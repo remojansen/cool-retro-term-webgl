@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';">
+    <title>Cool Retro Term</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000000;
+        }
+
+        #terminal {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Hide the hidden XTerm container */
+        .xterm-hidden {
+            position: absolute;
+            visibility: hidden;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        /* Custom scrollbar styling (if needed) */
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal"></div>
+    <script type="module" src="../dist/renderer.js"></script>
+</body>
+</html>

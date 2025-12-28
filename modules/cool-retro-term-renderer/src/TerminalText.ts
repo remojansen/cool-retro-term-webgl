@@ -738,9 +738,11 @@ export class TerminalText {
 		this.staticMaterial.uniforms.resolution.value.set(hiResWidth, hiResHeight);
 
 		this.dynamicMaterial.uniforms.resolution.value.set(hiResWidth, hiResHeight);
+		// Use logical dimensions (not hi-res) for noise scaling to match initial calculation
+		// This ensures consistent jitter/horizontalSync effect regardless of devicePixelRatio
 		this.dynamicMaterial.uniforms.scaleNoiseSize.value.set(
-			(hiResWidth * 0.75) / (512 * this.totalFontScaling),
-			(hiResHeight * 0.75) / (512 * this.totalFontScaling),
+			(width * 0.75) / (512 * this.windowScaling * this.totalFontScaling),
+			(height * 0.75) / (512 * this.windowScaling * this.totalFontScaling),
 		);
 		this.calculateFontMetrics();
 		this.render();
