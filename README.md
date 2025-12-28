@@ -1,1 +1,1 @@
-# web-retro-terminal
+# cool-retro-term-webgl
