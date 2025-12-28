@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
+          - os: macos-13
             platform: mac
           - os: ubuntu-latest
             platform: linux
