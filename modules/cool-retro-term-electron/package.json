@@ -10,11 +10,11 @@
 		"start": "electron .",
 		"rebuild": "npx @electron/rebuild",
 		"lint-and-format": "npx @biomejs/biome check --write --unsafe",
-		"pack": "electron-builder --dir",
-		"dist": "electron-builder",
-		"dist:mac": "electron-builder --mac",
-		"dist:win": "electron-builder --win",
-		"dist:linux": "electron-builder --linux"
+		"pack": "npx electron-builder --dir",
+		"dist": "npx electron-builder",
+		"dist:mac": "npx electron-builder --mac",
+		"dist:win": "npx electron-builder --win",
+		"dist:linux": "npx electron-builder --linux"
 	},
 	"build": {
 		"appId": "com.remojansen.cool-retro-term",
