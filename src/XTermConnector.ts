@@ -14,10 +14,10 @@ import type { TerminalText } from "./TerminalText";
 export class XTermConnector {
 	private xterm: Terminal;
 	private terminalText: TerminalText;
-	private disposed: boolean = false;
+	private disposed = false;
 
 	// Selection state
-	private isSelecting: boolean = false;
+	private isSelecting = false;
 	private selectionStart: { col: number; row: number } | null = null;
 
 	constructor(xterm: Terminal, terminalText: TerminalText) {

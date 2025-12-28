@@ -13,9 +13,7 @@
 			"require": "./dist/index.cjs"
 		}
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
 		"build": "npm run generate-assets && tsup --minify",
 		"dev": "npm run generate-assets && tsup --watch",

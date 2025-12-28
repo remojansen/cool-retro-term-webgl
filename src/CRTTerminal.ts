@@ -24,8 +24,8 @@ import type { Terminal } from "@xterm/xterm";
 import * as THREE from "three";
 import { TerminalFrame } from "./TerminalFrame";
 import { TerminalText } from "./TerminalText";
-import { type CRTTerminalSettings, DEFAULT_SETTINGS } from "./types";
 import { XTermConnector } from "./XTermConnector";
+import { type CRTTerminalSettings, DEFAULT_SETTINGS } from "./types";
 
 export class CRTTerminal {
 	private container: HTMLElement;
@@ -37,7 +37,7 @@ export class CRTTerminal {
 	private animationFrameId: number | null = null;
 	private connector: XTermConnector | null = null;
 	private settings: Required<Omit<CRTTerminalSettings, "container">>;
-	private disposed: boolean = false;
+	private disposed = false;
 
 	constructor(options: CRTTerminalSettings) {
 		this.container = options.container;

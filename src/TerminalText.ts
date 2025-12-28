@@ -114,41 +114,41 @@ export class TerminalText {
 		THREE.WebGLRenderTarget,
 		THREE.WebGLRenderTarget,
 	];
-	private burnInCurrentIndex: number = 0;
+	private burnInCurrentIndex = 0;
 	private burnInMaterial: THREE.ShaderMaterial;
 	private burnInScene: THREE.Scene;
 	private burnInCamera: THREE.OrthographicCamera;
 	private burnInMesh: THREE.Mesh;
-	private burnInAmount: number = 0.2517;
-	private lastFrameTime: number = 0;
+	private burnInAmount = 0.2517;
+	private lastFrameTime = 0;
 
 	// Burn-in timing settings (matching QML)
 	private readonly minBurnInFadeTime: number = 160;
 	private readonly maxBurnInFadeTime: number = 1600;
 
 	// Terminal state
-	private text: string = "";
+	private text = "";
 	private fontColor: Color;
 	private backgroundColor: Color;
-	private charWidth: number = 0;
-	private charHeight: number = 0;
-	private cols: number = 80;
-	private rows: number = 24;
-	private fontLoaded: boolean = false;
+	private charWidth = 0;
+	private charHeight = 0;
+	private cols = 80;
+	private rows = 24;
+	private fontLoaded = false;
 
 	// Cursor state
-	private cursorCol: number = 0;
-	private cursorRow: number = 0;
-	private cursorVisible: boolean = true;
-	private cursorBlinking: boolean = false;
-	private cursorBlinkState: boolean = true;
+	private cursorCol = 0;
+	private cursorRow = 0;
+	private cursorVisible = true;
+	private cursorBlinking = false;
+	private cursorBlinkState = true;
 	private cursorBlinkInterval: number | null = null;
 	private readonly CURSOR_BLINK_RATE: number = 530;
 
 	// Selection state (stored in absolute buffer coordinates)
 	private selectionStart: { col: number; row: number } | null = null;
 	private selectionEnd: { col: number; row: number } | null = null;
-	private selectionViewportY: number = 0;
+	private selectionViewportY = 0;
 
 	// Scaling (matching QML)
 	private screenScaling: number;
@@ -156,14 +156,14 @@ export class TerminalText {
 	private totalMargin: number;
 
 	// Window scaling factor (for retina/hidpi displays)
-	private windowScaling: number = 1.0;
+	private windowScaling = 1.0;
 
 	// Device pixel ratio for high-DPI rendering
-	private devicePixelRatio: number = 1.0;
+	private devicePixelRatio = 1.0;
 
 	// Logical dimensions (CSS pixels, before devicePixelRatio scaling)
-	private logicalWidth: number = 0;
-	private logicalHeight: number = 0;
+	private logicalWidth = 0;
+	private logicalHeight = 0;
 
 	// Callback for when grid size changes (e.g., when font loads)
 	private onGridSizeChangeCallback:
@@ -173,7 +173,7 @@ export class TerminalText {
 	// Video playback state
 	private videoElement: HTMLVideoElement | null = null;
 	private videoTexture: THREE.VideoTexture | null = null;
-	private isPlayingVideo: boolean = false;
+	private isPlayingVideo = false;
 	private originalTexture: THREE.CanvasTexture | null = null;
 
 	constructor(width: number, height: number) {
@@ -536,7 +536,7 @@ export class TerminalText {
 	setSelection(
 		start: { col: number; row: number } | null,
 		end: { col: number; row: number } | null,
-		viewportY: number = 0,
+		viewportY = 0,
 	): void {
 		this.selectionStart = start;
 		this.selectionEnd = end;

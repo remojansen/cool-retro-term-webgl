@@ -25,13 +25,5 @@
 		"parser": {
 			"unsafeParameterDecoratorsEnabled": true
 		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
 	}
 }
