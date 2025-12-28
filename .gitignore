@@ -80,7 +80,13 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+
+# Build output
+dist/
+
+# Generated assets
+src/assets/font.ts
+src/assets/noise.ts
 
 # Gatsby files
 .cache/
