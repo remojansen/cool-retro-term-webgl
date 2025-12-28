@@ -14,6 +14,10 @@
 		"dev:renderer": "npm run dev --workspace=cool-retro-term-renderer",
 		"dev:electron": "npm run dev --workspace=cool-retro-term-electron",
 		"start:electron": "npm run start --workspace=cool-retro-term-electron",
+		"dist": "npm run dist --workspace=cool-retro-term-electron",
+		"dist:mac": "npm run dist:mac --workspace=cool-retro-term-electron",
+		"dist:win": "npm run dist:win --workspace=cool-retro-term-electron",
+		"dist:linux": "npm run dist:linux --workspace=cool-retro-term-electron",
 		"lint-and-format": "npx @biomejs/biome check --write --unsafe"
 	},
 	"author": "Remo H. Jansen",

@@ -8,7 +8,7 @@
 
 import { spawn } from "node-pty";
 import type { IPty } from "node-pty";
-import { app, BrowserWindow, ipcMain, screen } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, screen } from "electron";
 import * as path from "node:path";
 import * as os from "node:os";
 
@@ -137,6 +137,31 @@ ipcMain.handle("terminal:get-process-id", () => {
 
 // App lifecycle events
 app.whenReady().then(() => {
+	// Set the app name (used in macOS menu)
+	app.name = "Cool Retro Term";
+
+	// Create a minimal menu for macOS (required for proper app name display)
+	if (process.platform === "darwin") {
+		const template: Electron.MenuItemConstructorOptions[] = [
+			{
+				label: app.name,
+				submenu: [
+					{ role: "about" },
+					{ type: "separator" },
+					{ role: "hide" },
+					{ role: "hideOthers" },
+					{ role: "unhide" },
+					{ type: "separator" },
+					{ role: "quit" },
+				],
+			},
+		];
+		Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+	} else {
+		// Remove menu entirely on Windows/Linux
+		Menu.setApplicationMenu(null);
+	}
+
 	createWindow();
 
 	app.on("activate", () => {

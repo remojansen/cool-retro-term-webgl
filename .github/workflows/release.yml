@@ -1,0 +1,95 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: win
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build renderer
+        run: npm run build:renderer
+
+      - name: Build electron
+        run: npm run build:electron
+
+      - name: Build distributables (macOS)
+        if: matrix.platform == 'mac'
+        run: npm run dist:mac --workspace=cool-retro-term-electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build distributables (Linux)
+        if: matrix.platform == 'linux'
+        run: npm run dist:linux --workspace=cool-retro-term-electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build distributables (Windows)
+        if: matrix.platform == 'win'
+        run: npm run dist:win --workspace=cool-retro-term-electron
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.platform }}
+          path: |
+            modules/cool-retro-term-electron/release/*.dmg
+            modules/cool-retro-term-electron/release/*.zip
+            modules/cool-retro-term-electron/release/*.exe
+            modules/cool-retro-term-electron/release/*.AppImage
+            modules/cool-retro-term-electron/release/*.deb
+          if-no-files-found: ignore
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: List artifacts
+        run: find artifacts -type f
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-alpha') || contains(github.ref, '-rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

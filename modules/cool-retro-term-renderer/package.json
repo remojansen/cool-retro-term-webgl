@@ -1,6 +1,6 @@
 {
 	"name": "cool-retro-term-renderer",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A WebGL-based CRT terminal renderer for XTerm.js with authentic retro effects",
 	"type": "module",
 	"main": "dist/index.cjs",
