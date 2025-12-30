@@ -4,7 +4,7 @@ A WebGL-based CRT terminal renderer that brings authentic retro CRT visual effec
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-![Preview](https://remojansen.github.io/assets/images/thumbnail.png)
+![Preview](./preview.png)
 
 ## 🎮 Live Demo
 
